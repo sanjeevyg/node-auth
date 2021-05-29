@@ -62,7 +62,7 @@ app.post('/users', (request, response) => {
             })
     })
 
-    app.get('/lucky-charm', authenticate, (request, response) => {
+    app.get('/authenticate', authenticate, (request, response) => {
         response.json({message: `${request.user.username} found me lucky-charm!`})
     })
 
