@@ -29,37 +29,94 @@ app.post('/users', (request, response) => {
             })
     })})
 
+    // app.post('/login', (request, response) => {
+    //     const user = request.body
+    //     database("user")
+    //         .where({ username: user.username })
+    //         .first()
+    //         .then(retrievedUser => {
+    //             if (!retrievedUser) throw new Error('No user found!')
+                
+    //             return Promise.all([
+    //                 bcrypt.compare(user.password, retrievedUser.password_hash),
+    //                 Promise.resolve(retrievedUser)
+    //             ])
+    //         }).then(results => {
+    //             const arePasswordTheSame = results[0]
+    //             const user = results[1]
+
+    //             if (!arePasswordTheSame) throw new Error('Wrong password!')
+
+    //             const payload = { username: user.username }
+    //             const secret = 'SECRET!'
+
+    //             jwt.sign(payload, secret, (error, token) => {
+    //                 if(error) throw new Error('Sing in error')
+
+    //                 response.json({ token })
+    //             })
+    //         }).catch(error => {
+    //             response.json(error.message)
+    //         })
+    // })
+
     app.post('/login', (request, response) => {
-        const user = request.body
+        const user  = request.body
         database("user")
             .where({ username: user.username })
             .first()
-            .then(retrievedUser => {
+            .then((retrievedUser) => {
                 if (!retrievedUser) throw new Error('No user found!')
-                
+
                 return Promise.all([
                     bcrypt.compare(user.password, retrievedUser.password_hash),
                     Promise.resolve(retrievedUser)
                 ])
-            }).then(results => {
-                const arePasswordTheSame = results[0]
-                const user = results[1]
+                }).then(results => {
+                    const arePasswordTheSame = results[0]
+                    const user = results[1]
 
-                if (!arePasswordTheSame) throw new Error('Wrong password!')
+                    if(!arePasswordTheSame) throw new Error('Wrong password!')
 
-                const payload = { username: user.username }
-                const secret = 'SECRET!'
+                    const payload = {username: user.username}
+                    const secret = 'SECRET!' 
+                    //process.env.SECRET
 
-                jwt.sign(payload, secret, (error, token) => {
-                    if(error) throw new Error('Sing in error')
-
-                    response.json({ token })
-                })
-            }).catch(error => {
-                response.json(error.message)
+                    jwt.sign(payload, secret, (error, token) => {
+                        if(error) throw new Error('Sign in error!')
+                        
+                        response.json({token})
+                    })
+                }).catch(error => {
+                    response.json(error.message)
             })
     })
 
+    app.get('/lucky-charm', authenticate, (request, response) => {
+        response.json({message: `${request.user.username} found me lucky-charm!`})
+    })
+
+    function authenticate(request, response, next) {
+        const authHeader = request.get('Authorization')
+        const token = authHeader.split(" ")[1]
+
+        const secret = "SECRET!"
+
+        jwt.verify(token, secret, (error, payload) => {
+            if(error) response.json(error.message)
+        
+            database('user')
+                .select()
+                .where({username: payload.username})
+                .first()
+                .then(user => {
+                    request.user = user 
+                    next()
+                }).catch(error => {
+                    response.json({error: error.message})
+        })
+        })
+    }
 
 
 
