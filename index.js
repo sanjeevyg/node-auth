@@ -13,8 +13,6 @@ app.use(express.json())
 const port = 3000
 
 app.post('/users', (request, response) => {
-    // const user = request.body
-    // console.log(user)
     bcrypt.hash(request.body.password, 12, (error, hasedPassword) => {
         database('user')
             .insert({
@@ -30,6 +28,41 @@ app.post('/users', (request, response) => {
                 response.sendStatus(500)
             })
     })})
+
+    app.post('/login', (request, response) => {
+        const user = request.body
+        database("user")
+            .where({ username: user.username })
+            .first()
+            .then(retrievedUser => {
+                if (!retrievedUser) throw new Error('No user found!')
+                
+                return Promise.all([
+                    bcrypt.compare(user.password, retrievedUser.password_hash),
+                    Promise.resolve(retrievedUser)
+                ])
+            }).then(results => {
+                const arePasswordTheSame = results[0]
+                const user = results[1]
+
+                if (!arePasswordTheSame) throw new Error('Wrong password!')
+
+                const payload = { username: user.username }
+                const secret = 'SECRET!'
+
+                jwt.sign(payload, secret, (error, token) => {
+                    if(error) throw new Error('Sing in error')
+
+                    response.json({ token })
+                })
+            }).catch(error => {
+                response.json(error.message)
+            })
+    })
+
+
+
+
 
 
 app.listen(port, () => {
