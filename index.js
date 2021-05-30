@@ -74,7 +74,7 @@ app.post('/users', (request, response) => {
 
         jwt.verify(token, secret, (error, payload) => {
             if(error) response.json(error.message)
-        
+
             database('user')
                 .select()
                 .where({username: payload.username})
@@ -88,7 +88,17 @@ app.post('/users', (request, response) => {
         })
     }
 
+    app.get('/users', (request, response) => {
+        database('user')
+            .select()
+            .returning('*')
+            .then(users => {
+                response.json({users})
+            }).catch(error => {
+                console.error({error: error.message})
+            })
 
+    })
 
 
 
