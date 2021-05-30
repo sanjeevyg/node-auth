@@ -3,14 +3,14 @@ const app = express()
 const cors = require('cors')
 const knex = require('knex')
 const connection = require('./knexfile.js').development
-const database = knex(connection)
 const jwt = require('jsonwebtoken')
+const database = knex(connection)
 const bcrypt = require('bcrypt')
 
 app.use(cors())
 app.use(express.json())
 
-const port = 3000
+const port = 5000
 
 app.post('/users', (request, response) => {
     bcrypt.hash(request.body.password, 12, (error, hasedPassword) => {
