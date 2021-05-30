@@ -10,7 +10,7 @@ const bcrypt = require('bcrypt')
 app.use(cors())
 app.use(express.json())
 
-const port = 5000
+const port = 3000
 
 app.post('/users', (request, response) => {
     bcrypt.hash(request.body.password, 12, (error, hasedPassword) => {
@@ -99,6 +99,16 @@ app.post('/users', (request, response) => {
             })
 
     })
+
+app.get('/users/:id', (request, response) => {
+    database('user')
+        .select()
+        .where({id: request.params.id})
+        .first()
+        .then(user => {
+            response.json({user})
+        })
+})
 
 
 
