@@ -27,7 +27,7 @@ app.post('/users', (request, response) => {
                 console.error({error: error.message})
                 response.sendStatus(500)
             })
-    })})
+})})
 
 
     app.post('/login', (request, response) => {
@@ -100,17 +100,27 @@ app.post('/users', (request, response) => {
 
     })
 
-app.get('/users/:id', (request, response) => {
-    database('user')
-        .select()
-        .where({id: request.params.id})
-        .first()
-        .then(user => {
-            response.json({user})
-        })
-})
+    app.get('/users/:id', (request, response) => {
+        database('user')
+            .select()
+            .where({id: request.params.id})
+            .first()
+            .then(user => {
+                response.json({user})
+            })
+    })
+    
 
-
+    app.patch('/users/:id', (request, response) => {
+        const user = request.body
+        database('user')
+            .where({id: request.params.id})
+            .update(user)
+            .then(user => {
+                response.json({user})
+            })
+    })
+  
 
 app.listen(port, () => {
     console.log(`listening to port ${port}`)
