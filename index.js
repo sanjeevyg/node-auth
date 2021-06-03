@@ -128,9 +128,12 @@ app.post('/users', (request, response) => {
             .delete()
             .then(() => {
                 response.json({message: `user with id ${id} is deleted`})
+            }).catch(error => {
+                console.error({error: error.message})
             })
-
     })
+
+    app.
   
 
 app.listen(port, () => {
