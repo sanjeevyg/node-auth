@@ -120,6 +120,17 @@ app.post('/users', (request, response) => {
                 response.json({user})
             })
     })
+
+    app.delete('/users/:id', (request, response) => {
+        const id = request.params.retrievedUser
+        database('user')
+            .where({id: id})
+            .delete()
+            .then(() => {
+                response.json({message: `user with id ${id} is deleted`})
+            })
+
+    })
   
 
 app.listen(port, () => {
