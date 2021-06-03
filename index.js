@@ -11,7 +11,7 @@ const { response } = require('express')
 app.use(cors())
 app.use(express.json())
 
-const port = 3000
+const port = 9000
 
 app.post('/users', (request, response) => {
     bcrypt.hash(request.body.password, 12, (error, hasedPassword) => {
