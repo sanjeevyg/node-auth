@@ -134,18 +134,18 @@ app.post('/users', (request, response) => {
             })
     })
 
-    app.post('/users', (request, resonse) => {
-        const user = request.body
-        database('user')
-            .insert(user)
-            .returning('*')
-            .then(user => {
-                response.json({user})
-            }).catch(error => {
-                console.error({error: error.message})
-                response.sendStatus(500)
-            })
-    })
+    // app.post('/users', (request, resonse) => {
+    //     const user = request.body
+    //     database('user')
+    //         .insert(user)
+    //         .returning('*')
+    //         .then(user => {
+    //             response.json({user})
+    //         }).catch(error => {
+    //             console.error({error: error.message})
+    //             response.sendStatus(500)
+    //         })
+    // })
   
 
 app.listen(port, () => {
