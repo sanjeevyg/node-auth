@@ -112,15 +112,15 @@ app.post('/users', (request, response) => {
     })
     
 
-    app.patch('/users/:id', (request, response) => {
-        const user = request.body
-        database('user')
-            .where({id: request.params.id})
-            .update(user)
-            .then(user => {
-                response.json({user})
-            })
-    })
+    // app.patch('/users/:id', (request, response) => {
+    //     const user = request.body
+    //     database('user')
+    //         .where({id: request.params.id})
+    //         .update(user)
+    //         .then(user => {
+    //             response.json({user})
+    //         })
+    // })
 
     // app.delete('/users/:id', (request, response) => {
     //     const id = request.params.retrievedUser
