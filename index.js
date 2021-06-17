@@ -89,17 +89,17 @@ app.post('/users', (request, response) => {
         })
     }
 
-    app.get('/users', (request, response) => {
-        database('user')
-            .select()
-            .returning('*')
-            .then(users => {
-                response.json({users})
-            }).catch(error => {
-                console.error({error: error.message})
-            })
+    // app.get('/users', (request, response) => {
+    //     database('user')
+    //         .select()
+    //         .returning('*')
+    //         .then(users => {
+    //             response.json({users})
+    //         }).catch(error => {
+    //             console.error({error: error.message})
+    //         })
 
-    })
+    // })
 
     app.get('/users/:id', (request, response) => {
         database('user')
