@@ -67,27 +67,27 @@ app.post('/users', (request, response) => {
         response.json({message: `${request.user.username} found me lucky-charm!`})
     })
 
-    function authenticate(request, response, next) {
-        const authHeader = request.get('Authorization')
-        const token = authHeader.split(" ")[1]
+    // function authenticate(request, response, next) {
+    //     const authHeader = request.get('Authorization')
+    //     const token = authHeader.split(" ")[1]
 
-        const secret = "SECRET!"
+    //     const secret = "SECRET!"
 
-        jwt.verify(token, secret, (error, payload) => {
-            if(error) response.json(error.message)
+    //     jwt.verify(token, secret, (error, payload) => {
+    //         if(error) response.json(error.message)
 
-            database('user')
-                .select()
-                .where({username: payload.username})
-                .first()
-                .then(user => {
-                    request.user = user 
-                    next()
-                }).catch(error => {
-                    response.json({error: error.message})
-        })
-        })
-    }
+    //         database('user')
+    //             .select()
+    //             .where({username: payload.username})
+    //             .first()
+    //             .then(user => {
+    //                 request.user = user 
+    //                 next()
+    //             }).catch(error => {
+    //                 response.json({error: error.message})
+    //     })
+    //     })
+    // }
 
     // app.get('/users', (request, response) => {
     //     database('user')
